@@ -22,7 +22,19 @@ async fn main() -> Result<(), anyhow::Error> {
 
     tracing::debug!(?config, "loaded config");
 
-    daprox::server::start(config).await
+    let shutdown = tokio::signal::ctrl_c().fuse();
+
+    let fut = daprox::server::start(config).fuse();
+
+    tokio::select! {
+        res = fut => {
+            res
+        }
+        _ = shutdown => {
+            tracing::info!("shutting down...");
+            Ok(())
+        }
+    }
 }
 
 #[derive(clap::Parser, Debug)]
