@@ -2,6 +2,8 @@ use std::path::{Path, PathBuf};
 
 use anyhow::Context;
 use clap::Parser;
+use futures::FutureExt;
+
 use daprox::config::ServerConfig;
 
 #[tokio::main]
@@ -17,7 +19,7 @@ async fn main() -> Result<(), anyhow::Error> {
         load_config_file(&path)
             .with_context(|| format!("Failed to load config file at '{}'", path.display()))?
     } else {
-        ServerConfig::default()
+        ServerConfig::from_env().context("Could not construct config")?
     };
 
     tracing::debug!(?config, "loaded config");
