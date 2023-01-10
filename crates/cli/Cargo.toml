@@ -1,0 +1,17 @@
+[package]
+name = "daprox_cli"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+daprox = { path = "../daprox" }
+
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+anyhow = { workspace = true, features = ["backtrace"] }
+
+clap = { version = "4.0.32", features = ["derive", "env", "cargo"] }
+tracing-subscriber = "0.3.16"
+serde_yaml = "0.9.16"
+tracing.workspace = true
